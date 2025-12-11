@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <title>FormateFacil.online | Cursos Técnicos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=League+Spartan:wght@400;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Inter", "sans-serif"],
+              heading: ["League Spartan", "sans-serif"],
+            },
+            colors: {
+              neon: {
+                orange: "#FF9F1C",
+                blue: "#2EC4B6",
+                purple: "#8B5CF6",
+                dark: "#010812",
+                surface: "#0B1221",
+              },
+            },
+            boxShadow: {
+              "neon-orange":
+                "0 0 10px rgba(255, 159, 28, 0.5), 0 0 20px rgba(255, 159, 28, 0.3)",
+              "neon-blue": "0 0 10px rgba(46, 196, 182, 0.5)",
+              "neon-purple": "0 0 10px rgba(139, 92, 246, 0.5)",
+            },
+            animation: {
+              "gradient-x": "gradient-x 3s ease infinite",
+              "grow-up": "grow-up 2s ease-out forwards",
+              "pulse-slow": "pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+            },
+            keyframes: {
+              "gradient-x": {
+                "0%, 100%": {
+                  "background-size": "200% 200%",
+                  "background-position": "left center",
+                },
+                "50%": {
+                  "background-size": "200% 200%",
+                  "background-position": "right center",
+                },
+              },
+              "grow-up": {
+                "0%": { height: "0%" },
+                "100%": { height: "var(--target-height)" },
+              },
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        background-color: #010812;
+        color: #ffffff;
+      }
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #0b1221;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #ff9f1c;
+        border-radius: 4px;
+      }
+      .text-gradient-animate {
+        background: linear-gradient(to right, #ff9f1c, #2ec4b6, #ff9f1c);
+        background-size: 200% auto;
+        color: transparent;
+        -webkit-background-clip: text;
+        background-clip: text;
+        animation: gradient-x 3s linear infinite;
+      }
+      .bg-gradient-animate {
+        background: linear-gradient(to right, #ff9f1c, #ff7e00);
+        background-size: 200% auto;
+        animation: gradient-x 3s linear infinite;
+      }
+    </style>
+    <script type="importmap">
+      {
+        "imports": {
+          "react/": "https://esm.sh/react@^19.2.1/",
+          "react": "https://esm.sh/react@^19.2.1",
+          "react-dom/": "https://esm.sh/react-dom@^19.2.1/",
+          "lucide-react": "https://esm.sh/lucide-react@^0.560.0",
+          "react-router-dom": "https://esm.sh/react-router-dom@^7.10.1"
+        }
+      }
+    </script>
+    <link rel="stylesheet" href="/index.css" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>
