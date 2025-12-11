@@ -23,9 +23,14 @@ dist-ssr
 *.sln
 *.sw?
 
+# Deployment config (Protege tus claves FTP/SFTP)
+sftp.json
+.ftpconfig
+
 # Environment variables
 .env
 .env.*
+!.env.example
 
 # TypeScript
 *.tsbuildinfo
