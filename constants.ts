@@ -15,56 +15,59 @@ export const CONTACT_INFO = {
 export const COURSES: Course[] = [
   {
     id: 'reparacion-celulares',
-    title: 'Reparación de Celulares',
-    subtitle: 'Domina la reparación de móviles y genera ingresos inmediatos',
-    description: 'Aprende desde cero diagnóstico, reparación de hardware, software y microsoldadura básica.',
+    title: 'Curso Reparación de Celulares',
+    subtitle: 'Domina la reparación de Smartphones iPhone y Android desde cero y prepárate para generar ingresos inmediatos',
+    description: 'Aprende: Hardware - Software - Microelectrónica - Microsoldadura.',
     image: 'https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?q=80&w=1000&auto=format&fit=crop',
-    priceUSD: 49.99,
-    rating: 4.8,
-    students: 1250,
+    priceUSD: 29.00,
+    originalPrice: 60.00,
+    rating: 5.0,
+    students: 1117,
     category: 'Tecnología',
     hotmartLink: 'https://hotmart.com/es/marketplace/productos/curso-de-reparacion-de-celulares-8/O60157236J',
-    level: 'Intermedio',
+    level: 'Experto',
     features: [
-      'Diagnóstico profesional de fallas',
-      'Cambio de módulos y baterías',
-      'Recuperación de sistemas (Software)',
-      'Técnicas de soldadura segura',
-      'Uso de multímetro y fuente de poder'
+      'Diagnóstico de fallas',
+      'Cambios de módulos, pantallas y baterías',
+      'Software y programas de software',
+      'Técnicas para trabajar más rápido y seguro',
+      'Herramientas: uso de multímetro y fuente de poder, microscopio, cautín, Flux',
+      'Libros de electrónica, esquemáticos y programas de Software'
     ],
     benefits: [
-      'Alta demanda laboral en tu ciudad',
-      'Inversión inicial baja en herramientas',
-      'Certificado profesional incluido',
-      'Acceso de por vida al contenido'
+      'Método guiado paso a paso para aprender a reparar celulares en menos de 30 días',
+      'Alta demanda laboral y rápido retorno de inversión',
+      'Baja inversión inicial',
+      'Certificado digital emitido por Hotmart',
+      'Acceso de por vida al contenido y actualizaciones futuras'
     ]
   },
 
-// acá comienza el nuevo curso de construcción completa
+  // acá comienza el nuevo curso de construcción completa
   {
     id: 'construccion-completa',
-    title: 'Experto en Construcción',
-    subtitle: 'Tradicional, Steel Framing y Wood Framing',
-    description: 'El curso más completo del mercado. Aprende a construir casas desde los cimientos hasta los acabados.',
+    title: 'Técnico Profesional en Construcción',
+    subtitle: 'Aprendé todo sobre albañilería desde cero. Más de 390 lecciones prácticas.',
+    description: 'Te transformarás en un verdadero profesional: desde limpieza de terrenos y lectura de planos hasta terminación y remodelación.',
     image: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=1000&auto=format&fit=crop',
-    priceUSD: 89.99,
+    priceUSD: 89.99, // Manteniendo precio original ya que no se especificó uno nuevo
     rating: 4.9,
-    students: 840,
+    students: 1000,
     category: 'Oficios',
     hotmartLink: 'https://pay.hotmart.com/L48336648S?ref=Y100605559Y&bid=1765442343044',
     level: 'Principiante',
     features: [
+      'Más de 390 lecciones prácticas y dinámicas',
+      'Limpieza de terrenos y medidas de seguridad',
       'Lectura de planos arquitectónicos',
-      'Cimentación y estructura',
-      'Construcción en Seco (Drywall)',
-      'Sistemas Steel Framing y Wood Framing',
-      'Instalaciones básicas'
+      'Terminación y remodelación',
+      'Resultados desde tu primera obra'
     ],
     benefits: [
-      'Aprende 3 sistemas constructivos en 1',
-      'Proyectos reales paso a paso',
+      'Más de 1000 alumnos capacitados',
       'Salida laboral inmediata',
-      'Certificación avalada'
+      'Curso online, práctico y fácil',
+      'Gana 4 cursos gratis al inscribirte hoy'
     ]
   },
 
@@ -124,35 +127,35 @@ export const COURSES: Course[] = [
     ]
   },
 
-// y así podes ir agregando más cursos...
+  // y así podes ir agregando más cursos...
 
-// curso de reparación de patinetas eléctricas
-  {
-    id: 'patinetas-electricas',
-    title: 'Movilidad Eléctrica',
-    subtitle: 'Reparación de Patinetas y Scooters',
-    description: 'El auge de la movilidad eléctrica necesita técnicos especializados hoy.',
-    image: 'https://images.unsplash.com/photo-1555593853-2cf5b7a1496a?q=80&w=1000&auto=format&fit=crop',
-    priceUSD: 45.00,
-    rating: 4.6,
-    students: 560,
-    category: 'Mecánica',
-    hotmartLink: 'https://hotmart.com', // Placeholder
-    level: 'Intermedio',
-    features: [
-      'Diagnóstico de baterías de litio',
-      'Reparación de controladores y motores',
-      'Cambio de ruedas macizas y neumáticas',
-      'Flasheo de firmware',
-      'Mantenimiento de frenos'
-    ],
-    benefits: [
-      'Nicho de mercado en explosión',
-      'Clientes fieles y recurrentes',
-      'Servicio rápido y bien pagado',
-      'Posibilidad de vender repuestos'
-    ]
-  },
+  // curso de reparación de patinetas eléctricas
+  // {
+  //   id: 'patinetas-electricas',
+  //   title: 'Movilidad Eléctrica',
+  //   subtitle: 'Reparación de Patinetas y Scooters',
+  //   description: 'El auge de la movilidad eléctrica necesita técnicos especializados hoy.',
+  //   image: 'https://images.unsplash.com/photo-1555593853-2cf5b7a1496a?q=80&w=1000&auto=format&fit=crop',
+  //   priceUSD: 45.00,
+  //   rating: 4.6,
+  //   students: 560,
+  //   category: 'Mecánica',
+  //   hotmartLink: 'https://hotmart.com', // Placeholder
+  //   level: 'Intermedio',
+  //   features: [
+  //     'Diagnóstico de baterías de litio',
+  //     'Reparación de controladores y motores',
+  //     'Cambio de ruedas macizas y neumáticas',
+  //     'Flasheo de firmware',
+  //     'Mantenimiento de frenos'
+  //   ],
+  //   benefits: [
+  //     'Nicho de mercado en explosión',
+  //     'Clientes fieles y recurrentes',
+  //     'Servicio rápido y bien pagado',
+  //     'Posibilidad de vender repuestos'
+  //   ]
+  // },
 
   // curso de mecánica de motos y bicicletas
   {

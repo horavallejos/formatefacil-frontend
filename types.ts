@@ -11,7 +11,8 @@ export interface Course {
   hotmartLink: string; // Link to checkout
   features: string[]; // "What you will learn"
   benefits: string[];
-  level: 'Principiante' | 'Intermedio' | 'Avanzado';
+  level: 'Principiante' | 'Intermedio' | 'Avanzado' | 'Experto';
+  originalPrice?: number;
 }
 
 export interface CurrencyConfig {
