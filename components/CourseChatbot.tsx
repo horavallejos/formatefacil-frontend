@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { MessageSquare, X, Send, Bot, User, Minimize2 } from 'lucide-react';
+import { MessageSquare, X, Send, Bot, User, Minimize2, MessageCircle } from 'lucide-react';
 import { Course } from '../types';
+import { CONTACT_INFO } from '../constants';
 
 interface CourseChatbotProps {
   course: Course;
@@ -20,6 +21,8 @@ export const CourseChatbot: React.FC<CourseChatbotProps> = ({ course }) => {
   const [isTyping, setIsTyping] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const lastResponseRef = useRef('');
+  const repetitionCountRef = useRef(0);
 
   // Initial greeting
   useEffect(() => {
@@ -108,7 +111,23 @@ export const CourseChatbot: React.FC<CourseChatbotProps> = ({ course }) => {
 
     // Simulate AI thinking delay
     setTimeout(() => {
-      const responseText = generateResponse(userText);
+      let responseText = generateResponse(userText);
+
+      // Lógica anti-loop (kill_him logic)
+      if (responseText === lastResponseRef.current) {
+        repetitionCountRef.current += 1;
+      } else {
+        repetitionCountRef.current = 1;
+        lastResponseRef.current = responseText;
+      }
+
+      if (repetitionCountRef.current >= 3) {
+        window.open(CONTACT_INFO.whatsappLink, '_blank');
+        responseText = "Parece que estamos dando vueltas. Te abro WhatsApp para que hables con un humano directamente. 👋";
+        repetitionCountRef.current = 0; // Reset
+        lastResponseRef.current = '';
+      }
+
       addMessage({
         id: (Date.now() + 1).toString(),
         text: responseText,
@@ -155,6 +174,15 @@ export const CourseChatbot: React.FC<CourseChatbotProps> = ({ course }) => {
               </div>
             </div>
             <div className="flex gap-2">
+               <a 
+                 href={CONTACT_INFO.whatsappLink} 
+                 target="_blank" 
+                 rel="noopener noreferrer"
+                 className="text-green-400 hover:text-white transition-colors p-1"
+                 title="Hablar con humano por WhatsApp"
+               >
+                 <MessageCircle size={18} />
+               </a>
                <button onClick={() => setIsOpen(false)} className="text-gray-400 hover:text-white transition-colors">
                 <Minimize2 size={18} />
               </button>

@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
 import { Sparkles, ArrowRight, Loader2, Bot } from 'lucide-react';
-import { COURSES } from '../constants';
 import { Link } from 'react-router-dom';
+import { Course } from '../types';
 
-export const AIRecommender: React.FC = () => {
+interface AIRecommenderProps {
+  courses: Course[];
+}
+
+export const AIRecommender: React.FC<AIRecommenderProps> = ({ courses }) => {
   const [input, setInput] = useState('');
   const [isThinking, setIsThinking] = useState(false);
-  const [suggestion, setSuggestion] = useState<typeof COURSES[0] | null>(null);
+  const [suggestion, setSuggestion] = useState<Course | null>(null);
   const [hasSearched, setHasSearched] = useState(false);
 
   const handleRecommend = (e: React.FormEvent) => {
@@ -21,20 +25,35 @@ export const AIRecommender: React.FC = () => {
       const lowerInput = input.toLowerCase();
       
       // Simple keyword matching "AI"
-      let found = COURSES.find(c => 
+      let found = courses.find(c => 
         c.title.toLowerCase().includes(lowerInput) || 
         c.description.toLowerCase().includes(lowerInput) ||
-        c.features.some(f => f.toLowerCase().includes(lowerInput))
+        (c.features && c.features.some((f: string) => f.toLowerCase().includes(lowerInput)))
       );
 
       // Fallback
-      if (!found) {
-        if (lowerInput.includes('manual') || lowerInput.includes('construir')) found = COURSES.find(c => c.id === 'construccion-completa');
-        else if (lowerInput.includes('tech') || lowerInput.includes('compu')) found = COURSES.find(c => c.id === 'reparacion-pc');
-        else found = COURSES[0]; // Default to most popular
+      if (!found && courses.length > 0) {
+        // Lógica refactorizada con un mapa de palabras clave (¡Gracias a tu sugerencia!)
+        const keywordMap = [
+          { id: 'construccion-completa', keywords: ['manual', 'construir', 'casa', 'obra', 'ladrillo'] },
+          { id: 'reparacion-pc', keywords: ['tech', 'compu', 'pc', 'ordenador', 'laptop'] },
+          { id: 'microsoldadura', keywords: ['soldar', 'micro', 'placa', 'chip', 'reballing'] },
+          { id: 'motos-bicicletas', keywords: ['moto', 'bici', 'rueda', 'taller', 'mecanica'] },
+          { id: 'patinetas-electricas', keywords: ['luz', 'patineta', 'electrica', 'scooter', 'bateria'] }
+        ];
+
+        for (const entry of keywordMap) {
+          if (entry.keywords.some(keyword => lowerInput.includes(keyword))) {
+            found = courses.find(c => c.id === entry.id);
+            if (found) break; // Si lo encuentra, sale del bucle
+          }
+        }
+
+        // Si después de todo no encuentra nada, va al default
+        if (!found) found = courses[0];
       }
 
-      setSuggestion(found || COURSES[0]);
+      setSuggestion(found || (courses.length > 0 ? courses[0] : null));
       setIsThinking(false);
       setHasSearched(true);
     }, 1500);

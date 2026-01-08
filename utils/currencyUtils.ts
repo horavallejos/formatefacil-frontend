@@ -19,6 +19,18 @@ export const getEstimatedCurrency = (): CurrencyConfig => {
   return { code: 'USD', symbol: 'US$', rate: 1 };
 };
 
+// Nueva función para obtener tasas reales
+export const fetchExchangeRate = async (base: string = 'USD'): Promise<Record<string, number> | null> => {
+  try {
+    const response = await fetch(`https://open.er-api.com/v6/latest/${base}`);
+    const data = await response.json();
+    return data.rates;
+  } catch (error) {
+    console.error('Error fetching exchange rates:', error);
+    return null;
+  }
+};
+
 export const formatPrice = (priceUSD: number, currency: CurrencyConfig): string => {
   const finalPrice = Math.round(priceUSD * currency.rate);
   return `${currency.symbol}${finalPrice.toLocaleString()} ${currency.code}`;

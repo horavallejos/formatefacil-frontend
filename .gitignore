@@ -2,5 +2,6 @@ node_modules/
 .env.local
 dist/
 .vscode
-
-# habria que agregar algo más? 
+formatefacil-frontend-data/
+time_machine/
+temps/

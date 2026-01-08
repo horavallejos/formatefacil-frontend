@@ -39,8 +39,13 @@
               "gradient-x": "gradient-x 3s ease infinite",
               "grow-up": "grow-up 2s ease-out forwards",
               "pulse-slow": "pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+              "fade-in": "fadeIn 0.3s ease-out forwards",
             },
             keyframes: {
+              fadeIn: {
+                "0%": { opacity: "0" },
+                "100%": { opacity: "1" },
+              },
               "gradient-x": {
                 "0%, 100%": {
                   "background-size": "200% 200%",
@@ -62,7 +67,11 @@
     </script>
     <style>
       body {
-        background-color: #010812;
+        background: radial-gradient(
+          circle at top center,
+          #1a2332 0%,
+          #010812 100%
+        );
         color: #ffffff;
       }
       /* Custom Scrollbar */
@@ -101,7 +110,7 @@
         }
       }
     </script>
-    <link rel="stylesheet" href="/index.css" />
+    <!-- <link rel="stylesheet" href="/index.css" /> -->
   </head>
   <body>
     <div id="root"></div>

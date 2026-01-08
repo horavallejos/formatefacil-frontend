@@ -1,17 +1,73 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from '../components/Button';
 import { CourseCard } from '../components/CourseCard';
 import { GrowthChart } from '../components/GrowthChart';
 import { AIRecommender } from '../components/AIRecommender';
-import { COURSES, CONTACT_INFO } from '../constants';
-import { CurrencyConfig } from '../types';
-import { Laptop, Award, Smartphone, Zap, CheckCircle2, Quote, MessageCircle } from 'lucide-react';
+import { LeadForm } from '../components/LeadForm';
+import { CONTACT_INFO } from '../constants';
+import { CurrencyConfig, Course } from '../types';
+import { Laptop, Award, Smartphone, Zap, CheckCircle2, Quote, MessageCircle, AlertCircle, ChevronRight, ChevronLeft } from 'lucide-react';
+import { supabase } from '../utils/supabaseClient';
 
 interface HomeProps {
   currency: CurrencyConfig;
 }
 
 export const Home: React.FC<HomeProps> = ({ currency }) => {
+  const [courses, setCourses] = useState<Course[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('courses')
+          .select('*');
+
+        if (error) throw error;
+
+        if (data) {
+          // Mapeamos para que el frontend siga usando el slug como ID (para iconos y links)
+          const mappedCourses = data.map((c: any) => ({
+            ...c,
+            id: c.course_id, // Usamos el slug ('reparacion-celulares') como ID principal
+            image: c.image_url, // Mapeamos image_url de DB a image del frontend
+            priceUSD: c.price_usd, // Mapeamos price_usd de DB a priceUSD del frontend
+            originalPriceUSD: c.original_price_usd, // Mapeamos el precio original
+            featured: c.featured, // Mapeamos el destacado
+            hotmartLink: c.hotmart_link // CORRECCIÓN: Mapeo del link
+          }));
+          setCourses(mappedCourses as Course[]);
+        }
+      } catch (err) {
+        console.error('Error fetching courses:', err);
+        setError('No se pudieron cargar los cursos. Por favor intenta más tarde.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCourses();
+  }, []);
+
+  // Lógica del Slider
+  const featuredCourses = courses.filter((c: any) => c.featured);
+  const slides = featuredCourses.length > 0 ? featuredCourses : courses.slice(0, 3); // Fallback a los primeros 3 si no hay destacados
+
+  useEffect(() => {
+    if (slides.length <= 1) return;
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
+    }, 6000); // Cambia cada 6 segundos
+    return () => clearInterval(interval);
+  }, [slides.length]);
+
+  const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % slides.length);
+  const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+
+
   return (
     <>
       <style>{`
@@ -21,61 +77,83 @@ export const Home: React.FC<HomeProps> = ({ currency }) => {
         }
       `}</style>
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center pt-24 pb-12 overflow-hidden bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]">
+      <section className="relative min-h-screen flex items-center pt-20 overflow-hidden bg-black">
         {/* Animated Background Gradients */}
         <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-neon-blue/20 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/3 animate-pulse-slow" />
         <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-neon-orange/10 rounded-full blur-[100px] translate-y-1/4 -translate-x-1/4 animate-pulse-slow" style={{ animationDelay: '1.5s' }} />
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        {/* Slider Container */}
+        {slides.length > 0 ? (
+          <div className="relative w-full h-full min-h-[85vh] flex items-center">
+            {slides.map((slide, index) => (
+              <div 
+                key={slide.id}
+                className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${index === currentSlide ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
+              >
+                {/* Background Image with Overlay */}
+                <div className="absolute inset-0">
+                  <img src={slide.image} alt={slide.title} className="w-full h-full object-cover opacity-40" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-transparent" />
+                </div>
 
-          <div className="text-center lg:text-left">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-neon-blue/30 bg-neon-blue/5 mb-6 backdrop-blur-sm">
-              <span className="w-2 h-2 rounded-full bg-neon-blue animate-pulse"></span>
-              <span className="text-neon-blue text-xs font-bold uppercase tracking-widest">Atención Personalizada 24/7</span>
+                {/* Content */}
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative h-full flex items-center">
+                  <div className="max-w-2xl pt-20">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-neon-orange/30 bg-neon-orange/10 mb-6 backdrop-blur-sm animate-fade-in">
+                      <span className="w-2 h-2 rounded-full bg-neon-orange animate-pulse"></span>
+                      <span className="text-neon-orange text-xs font-bold uppercase tracking-widest">Curso Destacado</span>
+                    </div>
+
+                    <h1 className="font-heading font-black text-5xl sm:text-7xl leading-tight mb-6 text-white animate-grow-up" style={{"--target-height": "auto"} as React.CSSProperties}>
+                      {slide.title}
+                    </h1>
+
+                    <p className="text-gray-300 text-lg sm:text-xl mb-8 font-light leading-relaxed line-clamp-3">
+                      {slide.subtitle || slide.description}
+                    </p>
+
+                    <div className="flex flex-col sm:flex-row gap-4">
+                      <a href={`#/curso/${slide.id}`}>
+                        <Button className="w-full sm:w-auto shadow-[0_0_20px_rgba(255,159,28,0.3)]">
+                          Ver Programa Completo
+                        </Button>
+                      </a>
+                      <a href={CONTACT_INFO.whatsappLink} target="_blank" rel="noopener noreferrer">
+                        <Button variant="outline" className="w-full sm:w-auto">Consultar por WhatsApp</Button>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+
+            {/* Slider Controls */}
+            <div className="absolute bottom-10 right-10 z-20 flex gap-4">
+              <button onClick={prevSlide} className="p-3 rounded-full border border-white/20 text-white hover:bg-white/10 transition-all">
+                <ChevronLeft size={24} />
+              </button>
+              <button onClick={nextSlide} className="p-3 rounded-full border border-white/20 text-white hover:bg-white/10 transition-all">
+                <ChevronRight size={24} />
+              </button>
             </div>
 
-            <h1 className="font-heading font-black text-5xl sm:text-7xl leading-tight mb-6 text-white">
-              FÓRMATE <br />
-              <span className="text-gradient-animate drop-shadow-lg">FÁCIL</span>. <br />
-              CRECE <span className="text-neon-blue">RÁPIDO</span>.
-            </h1>
-
-            <p className="text-gray-300 text-lg sm:text-xl mb-8 max-w-lg mx-auto lg:mx-0 font-light leading-relaxed">
-              Domina habilidades técnicas de alta demanda. Cursos online diseñados para que <span className="text-white font-bold">generes ingresos sin experiencia previa</span> desde el primer mes.
-            </p>
-
-            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-              <a href={CONTACT_INFO.whatsappLink} target="_blank" rel="noopener noreferrer">
-                <Button className="w-full sm:w-auto shadow-[0_0_20px_rgba(255,159,28,0.3)]">Inscríbete Hoy</Button>
-              </a>
-              <a href={CONTACT_INFO.whatsappLink} target="_blank" rel="noopener noreferrer">
-                <Button variant="outline" className="w-full sm:w-auto">Ver Catálogo</Button>
-              </a>
-            </div>
-
-            <div className="mt-12 flex items-center justify-center lg:justify-start gap-8">
-              <div className="flex items-center gap-2 group cursor-default">
-                <CheckCircle2 className="text-neon-blue group-hover:scale-110 transition-transform" />
-                <span className="text-sm font-bold text-gray-300 group-hover:text-white transition-colors">Certificado Oficial</span>
-              </div>
-              <div className="flex items-center gap-2 group cursor-default">
-                <CheckCircle2 className="text-neon-blue group-hover:scale-110 transition-transform" />
-                <span className="text-sm font-bold text-gray-300 group-hover:text-white transition-colors">+5000 Alumnos</span>
-              </div>
+            {/* Slide Indicators */}
+            <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 flex gap-2">
+              {slides.map((_, idx) => (
+                <button 
+                  key={idx}
+                  onClick={() => setCurrentSlide(idx)}
+                  className={`w-3 h-3 rounded-full transition-all ${idx === currentSlide ? 'bg-neon-orange w-8' : 'bg-white/30 hover:bg-white/50'}`}
+                />
+              ))}
             </div>
           </div>
-
-          <div className="hidden lg:flex flex-col gap-6 relative">
-            {/* Dynamic Elements Column */}
-            <div className="relative z-10 transform hover:scale-105 transition-transform duration-500">
-              <GrowthChart />
-            </div>
-
-            <div className="ml-12 transform hover:scale-105 transition-transform duration-500 delay-100">
-              <AIRecommender />
-            </div>
+        ) : (
+          // Fallback loading
+          <div className="min-h-screen flex items-center justify-center">
+            <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-neon-orange"></div>
           </div>
-        </div>
+        )}
       </section>
 
       {/* Motivational Strip */}
@@ -152,13 +230,30 @@ export const Home: React.FC<HomeProps> = ({ currency }) => {
 
           {/* Mobile AI Recommender (visible only on small screens) */}
           <div className="lg:hidden mb-12">
-            <AIRecommender />
+            <AIRecommender courses={courses} />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {COURSES.map(course => (
-              <CourseCard key={course.id} course={course} currency={currency} />
-            ))}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 min-h-[400px]">
+            {loading ? (
+              // Skeleton loading state
+              Array.from({ length: 3 }).map((_, i) => (
+                <div key={i} className="animate-pulse bg-gray-900 rounded-2xl h-[450px] border border-white/5"></div>
+              ))
+            ) : error ? (
+              <div className="col-span-full text-center py-12 bg-red-900/10 rounded-xl border border-red-500/20">
+                <AlertCircle className="mx-auto text-red-500 mb-4" size={48} />
+                <h3 className="text-xl font-bold text-white mb-2">Error al cargar</h3>
+                <p className="text-gray-400">{error}</p>
+              </div>
+            ) : courses.length > 0 ? (
+              courses.map(course => (
+                <CourseCard key={course.id} course={course} currency={currency} />
+              ))
+            ) : (
+              <div className="col-span-full text-center py-12">
+                <p className="text-gray-400">No se encontraron cursos disponibles.</p>
+              </div>
+            )}
           </div>
         </div>
       </section>
