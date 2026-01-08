@@ -19,6 +19,11 @@ Este documento sirve para registrar el estado del proyecto, las tareas pendiente
 
 ## 📝 Historial de Cambios
 
+### [Sesión Actual - Parte 20]
+- **Herramientas:** `JsonGenerator` actualizado a "Course Builder" completo. Ahora soporta todos los campos del esquema (`syllabus`, `features`, `benefits`, precios, marketing, etc.).
+- **Estrategia:** Se confirmó la evolución de esta herramienta hacia un **Panel de Control (Admin)** conectado a Supabase para gestión directa de cursos sin tocar SQL.
+- **I+D:** Investigación preliminar sobre "Function Calling" y "Tool Use" para futuros agentes de IA (Business Intelligence).
+
 ### [Sesión Actual - Parte 19]
 - **Feature (Marketing):** Agregado contador regresivo de 15 minutos ("Urgencia") dentro del Modal de Oferta en `CourseDetail`.
 - **UX:** El contador parpadea en rojo para llamar la atención visualmente.
@@ -42,7 +47,7 @@ Este documento sirve para registrar el estado del proyecto, las tareas pendiente
 - **Roadmap:** Se añadió el Panel Admin (CRUD) como paso futuro para eliminar la dependencia del desarrollador en la carga de datos.
 - **Consultoría:** Asesoramiento sobre estructura JSON para temarios y caracteres especiales.
 - **Bonus:** Se implementó `JsonGenerator.tsx` para facilitar la creación de temarios sin errores de sintaxis.
-
+ 
 ### [Sesión Actual - Parte 14]
 - **Confirmación:** Flujo de captura de leads y checkout con iframe funcionando correctamente en local.
 - **DB Schema:** Se proporcionó el SQL final para añadir `original_price_usd`, `featured` y `syllabus` a la tabla `courses`.

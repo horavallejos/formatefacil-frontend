@@ -5,3 +5,5 @@ dist/
 formatefacil-frontend-data/
 time_machine/
 temps/
+us.stackdump
+.DS_Store

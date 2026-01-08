@@ -18,6 +18,9 @@ CREATE TABLE public.courses (
   benefits jsonb,
   created_at timestamp without time zone DEFAULT now(),
   updated_at timestamp without time zone DEFAULT now(),
+  original_price_usd numeric,
+  featured boolean DEFAULT false,
+  syllabus jsonb,
   CONSTRAINT courses_pkey PRIMARY KEY (id)
 );
 CREATE TABLE public.leads (
